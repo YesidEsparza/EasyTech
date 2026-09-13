@@ -5,10 +5,14 @@
 }
 
 body {
-    font-family: "Poppins", Arial, sans-serif;
-    background-color: #02064F;
-    color: #FFFFFF;
-    line-height: 1.6;
+    margin: 0;
+    font-family: sans-serif;
+    background-image: url("../img/fondo.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: white;
 }
 
 .contenedor {
@@ -31,7 +35,7 @@ header {
 }
 
 .logo {
-    font-family: "Agency FB", Arial, sans-serif;
+    font-family: "Agency FB";
     font-size: 42px;
     color: #F47721;
     text-decoration: none;
@@ -90,7 +94,7 @@ h3 {
 }
 
 .subtitulo {
-    font-family: "Arial Narrow", Arial, sans-serif;
+    font-family: "Arial Narrow", sans-serif;
     margin-bottom: 30px;
     font-size: 19px;
 }
