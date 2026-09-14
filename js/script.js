@@ -1,24 +1,95 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const botones = document.querySelectorAll(".ver-mas");
+    const botonesProducto = document.querySelectorAll(".ver-mas");
 
-    botones.forEach(function (boton) {
-
+    botonesProducto.forEach(function (boton) {
         boton.addEventListener("click", function () {
 
             const tarjeta = boton.closest(".producto");
             const nombre = tarjeta.querySelector("h3").textContent;
             const precio = tarjeta.querySelector("strong").textContent;
 
-            alert(
-                "Producto: " + nombre +
-                "\nPrecio: " + precio
-            );
+            let detalle = tarjeta.querySelector(".detalle-producto");
 
+            if (!detalle) {
+                detalle = document.createElement("p");
+                detalle.className = "detalle-producto";
+                tarjeta.querySelector(".tarjeta-contenido").appendChild(detalle);
+            }
+
+            if (detalle.textContent === "") {
+                detalle.textContent = "Producto: " + nombre + " | Precio: " + precio;
+                boton.textContent = "Ocultar información";
+            } else {
+                detalle.textContent = "";
+                boton.textContent = "Ver más";
+            }
         });
-
     });
 
+    const campoBusqueda = document.getElementById("busqueda");
+    const filtroCategoria = document.getElementById("categoria");
+    const productos = document.querySelectorAll(".producto");
+
+    if (campoBusqueda && filtroCategoria) {
+
+        const contenedorProductos = document.querySelector(".productos");
+
+        let mensajeResultados = document.getElementById("mensajeResultados");
+
+        if (!mensajeResultados) {
+            mensajeResultados = document.createElement("p");
+            mensajeResultados.id = "mensajeResultados";
+            mensajeResultados.setAttribute("role", "status");
+            mensajeResultados.setAttribute("aria-live", "polite");
+
+            contenedorProductos.parentElement.insertBefore(
+                mensajeResultados,
+                contenedorProductos
+            );
+        }
+
+        function filtrarProductos() {
+
+            const texto = campoBusqueda.value.trim().toLowerCase();
+            const categoriaSeleccionada = filtroCategoria.value;
+
+            let cantidadVisible = 0;
+
+            productos.forEach(function (producto) {
+
+                const nombreProducto =
+                    producto.querySelector("h3").textContent.toLowerCase();
+
+                const categoriaProducto = producto.dataset.categoria;
+
+                const coincideTexto = nombreProducto.includes(texto);
+
+                const coincideCategoria =
+                    categoriaSeleccionada === "todos" ||
+                    categoriaProducto === categoriaSeleccionada;
+
+                const mostrarProducto = coincideTexto && coincideCategoria;
+
+                producto.hidden = !mostrarProducto;
+
+                if (mostrarProducto) {
+                    cantidadVisible++;
+                }
+            });
+
+            if (cantidadVisible === 0) {
+                mensajeResultados.textContent =
+                    "No se encontraron productos con esos criterios.";
+            } else {
+                mensajeResultados.textContent =
+                    "Productos encontrados: " + cantidadVisible;
+            }
+        }
+
+        campoBusqueda.addEventListener("input", filtrarProductos);
+        filtroCategoria.addEventListener("change", filtrarProductos);
+    }
 
     const formulario = document.getElementById("formularioContacto");
 
@@ -28,97 +99,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
             evento.preventDefault();
 
-            const nombre = document.getElementById("nombre").value.trim();
-            const correo = document.getElementById("correo").value.trim();
-            const asunto = document.getElementById("asunto").value.trim();
-            const mensaje = document.getElementById("mensaje").value.trim();
-
-
-            if (
-                nombre === "" ||
-                correo === "" ||
-                asunto === "" ||
-                mensaje === ""
-            ) {
-
-                alert("Por favor, completa todos los campos.");
-
+            if (!formulario.checkValidity()) {
+                formulario.reportValidity();
                 return;
             }
 
+            const nombre = document.getElementById("nombre").value.trim();
 
-            alert(
-                "Gracias, " +
-                nombre +
-                ". Tu mensaje fue enviado correctamente."
-            );
+            let confirmacion = document.getElementById("confirmacionFormulario");
+
+            if (!confirmacion) {
+                confirmacion = document.createElement("p");
+                confirmacion.id = "confirmacionFormulario";
+                confirmacion.setAttribute("role", "status");
+                confirmacion.setAttribute("aria-live", "polite");
+
+                formulario.appendChild(confirmacion);
+            }
+
+            confirmacion.textContent =
+                "Gracias, " + nombre +
+                ". Tus datos fueron validados correctamente.";
 
             formulario.reset();
-
         });
-
-    }
-
-
-    const busqueda = document.getElementById("busqueda");
-    const categoria = document.getElementById("categoria");
-
-    if (busqueda && categoria) {
-
-        const productos = document.querySelectorAll(".producto");
-
-
-        function filtrarProductos() {
-
-            const texto = busqueda.value.toLowerCase();
-            const seleccion = categoria.value;
-
-
-            productos.forEach(function (producto) {
-
-                const nombre =
-                    producto.querySelector("h3")
-                    .textContent
-                    .toLowerCase();
-
-                const tipo =
-                    producto.dataset.categoria;
-
-
-                const coincideNombre =
-                    nombre.includes(texto);
-
-                const coincideCategoria =
-                    seleccion === "todos" ||
-                    tipo === seleccion;
-
-
-                if (coincideNombre && coincideCategoria) {
-
-                    producto.style.display = "";
-
-                } else {
-
-                    producto.style.display = "none";
-
-                }
-
-            });
-
-        }
-
-
-        busqueda.addEventListener(
-            "input",
-            filtrarProductos
-        );
-
-
-        categoria.addEventListener(
-            "change",
-            filtrarProductos
-        );
-
     }
 
 });

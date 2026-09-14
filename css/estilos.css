@@ -139,9 +139,10 @@ h3 {
 
 .tarjeta img {
     width: 100%;
-    height: 210px;
+    height: 200px;
     object-fit: cover;
-    display: block;
+    display: contain;
+    background-color: #f0f0f0;
 }
 
 .tarjeta-contenido {
@@ -265,4 +266,29 @@ form textarea {
 
 form textarea {
     resize: vertical;
+}
+
+/* Mensajes de búsqueda y formulario */
+
+#mensajeResultados,
+#confirmacionFormulario {
+    margin: 15px 0;
+    padding: 12px;
+    color: #FFFFFF;
+    background-color: #0A2C43;
+    border-left: 4px solid #F47721;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.detalle-producto {
+    margin-top: 12px;
+    padding: 10px;
+    color: #FFFFFF;
+    background-color: #0D3A63;
+    border-radius: 5px;
+}
+
+[hidden] {
+    display: none !important;
 }
